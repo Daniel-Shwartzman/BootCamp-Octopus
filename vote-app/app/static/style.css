@@ -1,0 +1,171 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('https://static.scientificamerican.com/sciam/cache/file/5B6B736B-94E6-44D1-B566443C46B31BFA_source.jpg?w=1200'); /* Replace with your image path */
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container.home {
+    max-width: 600px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container.questions {
+    /* Styles for the other pages container here */
+    /* Adjust these properties as needed */
+    max-width: 1000px; /* Increase max-width */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container.questions table {
+    width: 100%; /* Table takes full width of the container */
+    border-collapse: collapse; /* Removes the default space between table cells */
+}
+
+.container.questions th, .container.questions td {
+    padding: 15px; /* Increase padding */
+    border: 1px solid #ddd; /* Add border */
+    text-align: left;
+}
+
+.container.questions input[type="radio"] {
+    margin-right: 10px; /* Increase space to the right of the radio buttons */
+}
+
+.container.questions h1 {
+    text-align: center;
+    color: #0c0c0c; /* Make the titles white */
+}
+
+.container.questions .options {
+    display: flex;
+    justify-content: space-between;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between; /* Adjust as needed */
+}
+
+.home-button {
+    display: inline-block; /* Changed from block to inline-block */
+    width: auto; /* Adjust as needed */
+    padding: 10px 20px; /* Adjust as needed */
+    font-size: 1.2em; /* Adjust as needed */
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
+
+.submit-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto; /* Adjust as needed */
+    padding: 10px 20px; /* Adjust as needed */
+    font-size: 1.2em; /* Adjust as needed */
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.results {
+    width: auto; /* Adjust as needed */
+    margin: 20px auto;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* Padding around the content */
+}
+
+.results table {
+    width: 50%; /* Table takes full width of the container */
+    border-collapse: collapse; /* Removes the default space between table cells */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px; /* Adjust as needed */
+}
+
+.results th, .results td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+}
+
+.results th {
+    background-color: #007BFF; /* Change to your preferred color */
+    color: #fff; /* White text for headers */
+}
+
+.results tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+.results tr:nth-child(odd) {
+    background-color: #e6e6e6; /* Slightly darker gray for odd rows */
+}
+
+.results h1, .results h2 {
+    color: #040404; /* Change to your preferred color */
+    text-align: center;
+    padding: 10px 0;
+}
+
+.results p {
+    font-size: 1.2em; /* Adjust as needed */
+    text-align: center;
+    color: #333; /* Adjust as needed */
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f2f2f2; /* Light gray background */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    display: inline-block; /* Makes the background as wide as the text */
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.2em;
+}
+
+input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}

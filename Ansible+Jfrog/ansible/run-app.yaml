@@ -1,0 +1,7 @@
+---
+# Creating playbook
+- name: Running entire application stack with kind, docker, k8s
+  hosts: devops
+  roles:
+    - artifactory-role # This role will build the Docker image and upload it to JFrog Artifactory
+    - application-role # This role will download the Docker image from JFrog Artifactory, load it into kind, and apply the K8S files

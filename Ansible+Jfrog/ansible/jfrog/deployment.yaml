@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jfrog-deployment
+  namespace: artifactory 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifactory # has to match service
+  template:
+    metadata:
+      labels:
+        app: artifactory
+    spec:
+      containers:
+      - name: artifactory
+        image: docker.bintray.io/jfrog/artifactory-oss:latest
+        ports:
+          - containerPort: 8081
+        volumeMounts: # Mount the volume to the container
+          - name: artifactory-data
+            mountPath: /data/db
+      volumes: # Define the volume
+      - name: artifactory-data
+        persistentVolumeClaim: # Use the persistent volume claim
+          claimName: jfrog-pvc

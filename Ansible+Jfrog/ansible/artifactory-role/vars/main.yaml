@@ -1,0 +1,8 @@
+---
+# vars file for artifactory-role
+docker_image_name: api-app-image
+docker_image_tag: latest
+docker_build_path: /home/ansible/python
+dockerfile: /home/ansible/python/Dockerfile
+tar_image_src: /home/ansible/api-app-image.tar.gz
+jfrog_url: http://jfrog-ds.octopus.lab/artifactory/generic-local/api-app-image.tar.gz

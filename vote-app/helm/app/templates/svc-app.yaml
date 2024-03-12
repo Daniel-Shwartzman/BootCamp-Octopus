@@ -1,0 +1,13 @@
+apiVersion: v1 # Setting the version of the API
+kind: Service # The kind of resource we are creating
+metadata:
+  namespace: {{ .Values.app.namespace }} # The namespace where the service will be created (from the values.yaml file)
+  name: {{ .Values.app.service.name }} # The name of the service
+  labels:
+    app: {{ .Values.app.label }} # The label of the service (used to match the service with the deployment)
+spec:
+  ports:
+  - port: {{ .Values.app.service.port }} # The port that the service will listen on
+    targetPort: {{ .Values.app.service.targetPort }}  # The port that the service will forward requests to  
+  selector:
+    app: {{ .Values.app.label }} # The label of the service (used to match the service with the deployment)

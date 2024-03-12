@@ -1,0 +1,7 @@
+---
+# Creating playbook
+- name: Installing entire application stack with kind, docker, k8s
+  hosts: devops
+  roles:
+    - setup-role # This role will install docker, kind, kubectl, and other dependencies
+    - jfrog-role # This role will install JFrog Artifactory

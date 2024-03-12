@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <title>Questions</title>
+</head>
+<body>
+    <div class="container questions">
+        <h1>Questions</h1>
+        <form method="POST" action="/submit-answers">
+            <input type="hidden" name="username" value="{{ username }}">
+            <table>
+                <tr>
+                    <td>Question 1: Who is the 45th president of the United States?</td>
+                    <td>
+                        <input type="radio" id="question1Biden" name="question1" value="Biden">Biden
+                        <input type="radio" id="question1Trump" name="question1" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 2: Who won the 2016 United States presidential election?</td>
+                    <td>
+                        <input type="radio" id="question2Biden" name="question2" value="Biden">Biden
+                        <input type="radio" id="question2Trump" name="question2" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 3: Who ran as the Republican candidate for the presidency in 2020?</td>
+                    <td>
+                        <input type="radio" id="question3Biden" name="question3" value="Biden">Biden
+                        <input type="radio" id="question3Trump" name="question3" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 4: Who was the former host of the reality TV show "The Apprentice"?</td>
+                    <td>
+                        <input type="radio" id="question4Biden" name="question4" value="Biden">Biden
+                        <input type="radio" id="question4Trump" name="question4" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 5: Who served as the Vice President under Barack Obama?</td>
+                    <td>
+                        <input type="radio" id="question5Biden" name="question5" value="Biden">Biden
+                        <input type="radio" id="question5Trump" name="question5" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 6: Who was known for the catchphrase "Make America Great Again"?</td>
+                    <td>
+                        <input type="radio" id="question6Biden" name="question6" value="Biden">Biden
+                        <input type="radio" id="question6Trump" name="question6" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 7: Who served as the 47th Vice President of the United States?</td>
+                    <td>
+                        <input type="radio" id="question7Biden" name="question7" value="Biden">Biden
+                        <input type="radio" id="question7Trump" name="question7" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 8: Who was the President during the COVID-19 pandemic's initial outbreak in the United States?</td>
+                    <td>
+                        <input type="radio" id="question8Biden" name="question8" value="Biden">Biden
+                        <input type="radio" id="question8Trump" name="question8" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 9: Who was the Democratic nominee for President in the 2020 election?</td>
+                    <td>
+                        <input type="radio" id="question9Biden" name="question9" value="Biden">Biden
+                        <input type="radio" id="question9Trump" name="question9" value="Trump">Trump
+                    </td>
+                </tr>
+                <tr>
+                    <td>Question 10: Who is the 46th president of the United States?</td>
+                    <td>
+                        <input type="radio" id="question10Biden" name="question10" value="Biden">Biden
+                        <input type="radio" id="question10Trump" name="question10" value="Trump">Trump
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Submit Answers" class="submit-button">
+        </form>
+    </div>
+</body>
+</html>

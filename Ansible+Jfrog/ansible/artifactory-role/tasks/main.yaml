@@ -1,0 +1,35 @@
+---
+# tasks file for artifactory-role
+# Build the Docker Image
+- name: Build Docker image
+  ansible.builtin.docker_image:
+    name: "{{ docker_image_name }}"
+    tag: "{{ docker_image_tag }}"
+    source: build
+    build:
+      path: "{{ docker_build_path }}"
+      dockerfile: "{{ dockerfile }}"
+
+# Save Docker Image to Tar File
+- name: Save Docker image to tar file
+  ansible.builtin.shell:
+    cmd: docker save {{ docker_image_name }}:{{ docker_image_tag }} | gzip > "{{ tar_image_src }}"
+
+# Include vault variables
+- name: Include vault variables
+  ansible.builtin.include_vars:
+    file: vault.yaml
+    name: vault
+
+# Upload Docker Image Tar to JFrog Artifactory
+- name: Upload Docker image tar to JFrog Artifactory
+  ansible.builtin.uri:
+    url: "{{ jfrog_url }}"
+    method: PUT
+    user: "{{ vault.jfrog_username }}"
+    password: "{{ vault.jfrog_password }}"
+    body_format: raw
+    src: "{{ tar_image_src }}"
+    force_basic_auth: yes
+    status_code: 201
+    remote_src: yes

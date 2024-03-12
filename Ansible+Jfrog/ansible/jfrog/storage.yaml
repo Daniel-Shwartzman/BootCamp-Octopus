@@ -1,0 +1,33 @@
+# Creating a PersistentVolume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jfrog-pv
+  namespace: artifactory
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 5Gi # Storage capacity
+  accessModes:
+    - ReadWriteOnce # This specifies that the volume can be mounted as read-write by a single node
+  hostPath:
+    path: "/data/db" # specifies a directory on the host node's filesystem to use for the storage (inside the container)
+  persistentVolumeReclaimPolicy: Retain # This specifies that the volume should not be deleted when the claim is deleted
+  storageClassName: standard
+  volumeMode: Filesystem # specifies that the volume should be mounted to the Pod as a filesystem
+---
+# Creating a PersistentVolumeClaim
+# The info should match the PersistentVolume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jfrog-pvc
+  namespace: artifactory
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-app-deployment
+  namespace: {{ .Values.app.namespace }}
+  labels:
+    app: {{ .Values.app.label }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels: 
+      app: {{ .Values.app.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.label }}
+    spec:
+      containers:
+      - name: {{ .Values.app.label }}
+        image: "{{ .Values.app.image }}:{{ .Values.app.tag }}"
+        ports:
+        - containerPort: {{ .Values.app.service.targetPort }}
+        env: # Define environment variables
+        - name: {{ .Values.secrets.username }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.username }}
+              optional: true
+        - name: {{ .Values.secrets.password }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.password }}
+              optional: true
+        - name: {{ .Values.secrets.ip }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.ip }}
+              optional: true
+        - name: {{ .Values.secrets.database }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.database }}
+              optional: true

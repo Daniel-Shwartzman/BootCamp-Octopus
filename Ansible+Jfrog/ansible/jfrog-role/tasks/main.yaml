@@ -1,0 +1,33 @@
+---
+# tasks file for jfrog-role
+# Creating Direcory
+- name: Create Jfrog Directory
+  ansible.builtin.file:
+    path: /home/ansible/jfrog
+    state: directory
+
+# Copying Files
+- name: Copy Jfrog K8S Files
+  ansible.builtin.copy:
+    src: "jfrog/{{ item }}"
+    dest: /home/ansible/jfrog/
+  loop: "{{ jfrog_k8s_files }}"
+
+
+# Applying K8S Files
+- name: Apply Jfrog K8S Files
+  ansible.builtin.shell:
+    cmd: kubectl apply -f /home/ansible/jfrog/{{ item }}
+  loop: "{{ jfrog_k8s_files }}"
+
+# Get the IP address of the ingress
+- name: Get the IP address of the ingress
+  ansible.builtin.shell: kubectl get ingress -n artifactory jfrog-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+  register: ingress_ip
+
+# Add domain to /etc/hosts
+- name: Add domain to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: '{{ ingress_ip.stdout }} jfrog-ds.octopus.lab'
+    state: present

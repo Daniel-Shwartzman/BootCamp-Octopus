@@ -1,0 +1,8 @@
+---
+# vars file for jfrog-role
+jfrog_k8s_files:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+  - storage.yaml
+  - ingress.yaml

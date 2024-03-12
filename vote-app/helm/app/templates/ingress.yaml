@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1 # Setting the API version
+kind: Ingress # Setting the kind
+metadata:
+  namespace: {{ .Values.app.namespace }} # Setting the namespace
+  name: vote-app-ingress # Setting the name of the ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx" # Setting the ingress class
+spec:
+  rules:
+  - host: ds-vote-app.octopus.lab # Setting the domain (taken from /etc/hosts)
+    http:
+      paths:
+      - path: / # Setting the path(homepage)
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.app.service.name }} # Ensuring the service matches the service name
+            port:
+              number: {{ .Values.app.service.port }} # Setting the port number traffic will be sent to

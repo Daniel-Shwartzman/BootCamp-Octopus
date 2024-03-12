@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.db.label }}
+  namespace: {{ .Values.db.namespace }}
+spec:
+  serviceName: {{ .Values.db.service.name }}
+  replicas: {{ .Values.db.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.db.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.db.label }}
+    spec:
+      containers:
+      - name: {{ .Values.db.label }}
+        image: {{ .Values.db.image }}
+        ports:
+        - containerPort: {{ .Values.db.service.port }}
+          name: {{ .Values.db.label }}
+        env: # This section is defining environment variables for the containers in the pods(Taken from secrets.yaml)
+        - name: {{ .Values.secrets.username }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.username }}
+        - name: {{ .Values.secrets.password }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.password }}
+        - name: {{ .Values.secrets.database }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.database }}
+        - name: {{ .Values.secrets.ip }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secrets.name }}
+              key: {{ .Values.secrets.ip }}
+        volumeMounts: # This section is defining where volumes (persistent storage) should be mounted within the container's filesystem
+        - name: mongodb-data
+          mountPath: /data/db
+        - name: {{ .Values.cm.name }}
+          mountPath: /docker-entrypoint-initdb.d # This is a special directory that  Docker checks at startup for scripts
+      volumes: # This section is defining the volumes that can be mounted by containers in the pod
+      - name: {{ .Values.cm.name }}
+        configMap:
+          name: {{ .Values.cm.name }}
+  volumeClaimTemplates: # This section is used to define the pvc for each pod
+  - metadata:
+      name: mongodb-data
+    spec:
+      accessModes: [ "{{ .Values.storage.accessMode }}" ]
+      storageClassName: {{ .Values.storage.storageClassName }}
+      resources:
+        requests:
+          storage: {{ .Values.db.storage.capacity }}

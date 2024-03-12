@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.cm.name }}
+  namespace: {{ .Values.db.namespace }}
+
+# The section to mention the key:value pare, in this file it is the name of a js script and the content of the file
+data:
+  init.js: |
+    db = db.getSiblingDB('admin');
+    db.createUser({
+      user: #username#,
+      pwd: #password#,
+      roles: [{ role: 'readWriteAnyDatabase', db: 'admin' }],
+    });

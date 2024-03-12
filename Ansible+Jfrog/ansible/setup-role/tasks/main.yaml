@@ -1,0 +1,118 @@
+---
+# tasks file for setup-role
+# Creating task for installing docker-ce package
+- name: Installing Docker
+  ansible.builtin.dnf:
+    name: docker-ce
+    state: present
+
+# Creating task for checking successful installation of docker-ce package
+- name: Checking Docker Installation
+  ansible.builtin.command: 
+    cmd: docker --version
+
+# Creating task for starting adding user to docker group
+- name: Adding User to Docker Group
+  ansible.builtin.user:
+    name: ansible
+    groups: docker
+    append: yes
+
+# Creating task for starting docker service
+- name: Starting Docker Service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+# Creating task for installing kind 
+- name: Installing Kind
+  ansible.builtin.shell: 
+    cmd: curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
+      && chmod +x ./kind
+      && mv ./kind /usr/local/bin/kind
+
+# Creating task for creating a kind cluster file
+- name: Creating Kind Cluster File
+  ansible.builtin.copy:
+    content: |
+      kind: Cluster
+      apiVersion: kind.x-k8s.io/v1alpha4
+      name: "{{ kind_cluster_name }}"
+      nodes:
+      - role: control-plane
+        image: "{{ kind_node_image }}"
+      - role: worker
+        image: "{{ kind_node_image }}"
+    dest: "{{ kind_config_path }}"
+
+# Checking if cluster already exists
+- name: Checking Kind Cluster
+  ansible.builtin.command:
+    cmd: kind get clusters
+  register: kind_cluster 
+    
+# Creating task for cluster creation
+- name: Creating Kind Cluster
+  ansible.builtin.command:
+    cmd: kind create cluster --config /home/ansible/kind-config.yaml
+  notify: Restarting Docker Service
+  when: "'{{ kind_cluster_name }}' not in kind_cluster.stdout"
+
+# Donwloading Helm
+- name: Downloading Helm
+  ansible.builtin.dnf:
+    name: helm
+    state: present
+
+# Downloading nginx ingress controller
+- name: Downloading Nginx Ingress Controller
+  ansible.builtin.shell: |
+    helm pull oci://ghcr.io/nginxinc/charts/nginx-ingress --untar --version 1.1.3
+    cd nginx-ingress
+    kubectl apply -f crds/
+    helm install nginx-ingress oci://ghcr.io/nginxinc/charts/nginx-ingress --version 1.1.3
+    
+# Downloading MetalLB
+- name: Downloading MetalLB
+  ansible.builtin.shell: |
+    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+    sleep 90
+
+
+# Get Docker network information
+- name: Get Docker network information
+  ansible.builtin.shell: docker network inspect kind
+  register: docker_network_info
+
+
+# Extract IP range
+- name: Extract IP range
+  set_fact:
+    ip_range: "{{ (docker_network_info.stdout | from_json)[0].IPAM.Config[0].Subnet | regex_search('(\\d+\\.\\d+)') }}.255.200 - {{ (docker_network_info.stdout | from_json)[0].IPAM.Config[0].Subnet | regex_search('(\\d+\\.\\d+)') }}.255.255"
+
+
+# Create MetalLB configuration file
+- name: Create MetalLB configuration file
+  ansible.builtin.copy:
+    dest: /home/ansible/metallb-config.yaml
+    content: |
+      apiVersion: metallb.io/v1beta1
+      kind: IPAddressPool
+      metadata:
+        name: example
+        namespace: metallb-system
+      spec:
+        addresses:
+        - {{ ip_range }}
+      ---
+      apiVersion: metallb.io/v1beta1
+      kind: L2Advertisement
+      metadata:
+        name: empty
+        namespace: metallb-system
+
+
+# Apply MetalLB configuration
+- name: Apply MetalLB configuration
+  ansible.builtin.shell: kubectl apply -f /home/ansible/metallb-config.yaml

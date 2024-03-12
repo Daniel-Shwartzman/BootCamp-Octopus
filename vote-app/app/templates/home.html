@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <title>Vote for Trump or Biden</title>
+</head>
+<body>
+    <div class="container home">
+        <h1>Vote for Trump or Biden</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <div class="options">
+            <div class="option">
+                <button class="home-button" onclick="vote('Biden')">Biden</button>
+            </div>
+            <div class="option">
+                <button class="home-button" onclick="vote('Trump')">Trump</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function vote(candidate) {
+            var username = document.getElementById('username').value;
+            fetch('/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: username, candidate: candidate}),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                window.location.href = '/questions?username=' + username;
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+        }
+    </script>
+</body>
+</html>

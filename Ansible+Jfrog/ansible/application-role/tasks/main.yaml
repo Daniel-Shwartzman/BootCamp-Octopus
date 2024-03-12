@@ -1,0 +1,74 @@
+---
+# tasks file for application-role
+# Creating Direcory
+- name: Create app Directory
+  ansible.builtin.file:
+    path: "{{ app_directory }}"
+    state: directory
+
+# Include vault variables
+- name: Include vault variables
+  ansible.builtin.include_vars:
+    file: vault.yaml
+    name: vault
+
+# Get the tar file from Jfrog
+- name: Get the tar file from Jfrog
+  ansible.builtin.get_url:
+    url: "{{ jfrog_url }}"
+    dest: /home/ansible/api-app-image.tar.gz
+    username: "{{ vault.jfrog_username }}"
+    password: "{{ vault.jfrog_password }}"
+    force_basic_auth: yes
+
+# Load the Docker image
+- name: Load the Docker image
+  ansible.builtin.command:
+    cmd: docker load -i "{{ tar_dest }}" # -i is for input file
+  delegate_to: remote-machine
+
+# Load the Docker image into kind
+- name: Load the Docker image into kind
+  ansible.builtin.command:
+    cmd: kind load docker-image "{{ docker_image_name }}" --name "{{ k8s_cluster_name }}"
+  delegate_to: remote-machine
+
+# Copying Files
+- name: Copy App K8S Files
+  ansible.builtin.copy:
+    src: "app/{{ item }}"
+    dest: /home/ansible/app/
+  loop: "{{ k8s_files }}"
+
+# Change the image name in deployment.yaml
+- name: Change the image name in deployment.yaml
+  ansible.builtin.replace:
+    path: /home/ansible/app/deployment.yaml
+    regexp: 'image: .+'
+    replace: 'image: {{ docker_image_name }}'
+
+
+# Ensure kubernetes Python library is installed
+- name: Ensure kubernetes Python library is installed
+  ansible.builtin.pip:
+    name: kubernetes
+    state: present
+
+# Applying K8S Files
+- name: Apply App K8S Files
+  kubernetes.core.k8s:
+    src: "/home/ansible/app/{{ item }}"
+    state: present
+  loop: "{{ k8s_files }}"
+
+# Get the IP address of the ingress
+- name: Get the IP address of the ingress
+  ansible.builtin.shell: kubectl get ingress -n api-app api-app-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+  register: ingress_ip
+
+# Add domain to /etc/hosts
+- name: Add domain to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: '{{ ingress_ip.stdout }} {{ domain }}'
+    state: present

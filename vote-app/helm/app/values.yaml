@@ -1,0 +1,32 @@
+storage:
+  capacity: 5Gi
+  storageClassName: standard
+  accessMode: ReadWriteOnce
+cm:
+  name: mongo-init-db
+secrets:
+  name: mongodb-credentials
+  username: MONGO_ROOT_USERNAME
+  password: MONGO_ROOT_PASSWORD
+  database: MONGO_DATABASE
+  ip: MONGO_IP
+db:
+  namespace: mongo
+  image: mongo:4.4.6
+  label: mongodb
+  replicas: 1
+  storage:
+    capacity: 5Gi
+  service:
+    name: mongodb-service
+    port: 27017
+app:
+  namespace: vote-app
+  image: dshwartzman5/vote-app
+  tag: latest
+  label: vote-app
+  replicas: 1
+  service:
+    name: vote-app-service
+    port: 80
+    targetPort: 5000

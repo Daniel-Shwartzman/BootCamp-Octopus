@@ -1,0 +1,14 @@
+---
+# vars file for application-role
+# vars/main.yml
+app_directory: /home/ansible/app
+jfrog_url: http://jfrog-ds.octopus.lab/artifactory/generic-local/api-app-image.tar.gz
+tar_dest: /home/ansible/api-app-image.tar.gz
+docker_image_name: api-app-image:latest
+k8s_cluster_name: devtest-cluster
+k8s_files:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+domain: ds-api-app.octopus.lab

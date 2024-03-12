@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: api-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-app # has to match service
+  template:
+    metadata:
+      labels:
+        app: api-app
+    spec:
+      containers:
+      - name: api-app
+        image: api-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000

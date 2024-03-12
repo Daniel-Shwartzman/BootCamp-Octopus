@@ -1,0 +1,6 @@
+---
+# vars file for setup-role
+kind_node_image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
+kind_config_path: /home/ansible/kind-config.yaml
+kind_cluster_name: devtest-cluster
+

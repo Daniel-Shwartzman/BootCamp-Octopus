@@ -1,0 +1,7 @@
+---
+# handlers file for setup-role
+# Creating task for restarting docker service
+- name: Restarting Docker Service
+  ansible.builtin.service:
+    name: docker
+    state: restarted

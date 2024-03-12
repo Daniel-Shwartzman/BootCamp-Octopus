@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jfrog-ingress
+  namespace: artifactory
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.org/client-max-body-size: "100m" # Set the maximum body size to 100m
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m" # Set the maximum body size to 100m
+spec:
+  rules:
+    - host: jfrog-ds.octopus.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jfrog-service
+                port:
+                  number: 8082 # Send requests to port 8082 on the pods

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <title>Voting Results</title>
+</head>
+<body>
+    <div class="results">
+        <h1>Voting Results</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Trump</td>
+                    <td>{{ trump_votes }}</td>
+                </tr>
+                <tr>
+                    <td>Biden</td>
+                    <td>{{ biden_votes }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>User Answers</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Right Answers</th>
+                    <th>Wrong Answers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_data in users_data %}
+                    <tr>
+                        <td>{{ user_data.username }}</td>
+                        <td>{{ user_data.right_answers }}</td>
+                        <td>{{ user_data.wrong_answers }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
